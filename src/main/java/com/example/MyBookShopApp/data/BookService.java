@@ -6,10 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -49,15 +46,25 @@ public class BookService {
         }
     }
     public void setAuthorsData(List<Book> list){
-        HashMap<Integer,String> auth = new HashMap<>();
+        HashSet<String> auth = new HashSet<>();
         for(int i = 0; i<list.size();i++){
-            auth.put(i,list.get(i).getAuthor());
+            auth.add(list.get(i).getAuthor());
         }
         //MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        for(int i = 0; i<auth.size();i++){
-            //parameterSource.addValue("aut",auth.get(i));
-            jdbcTemplate.update("INSERT INTO authors(author) VALUES (?)",auth.get(i));
-            Logger.getLogger(BookService.class.getName()).info("Updated author "+ auth.get(i));
+        List<Authors> test = jdbcTemplate.query("SELECT * FROM authors",(ResultSet rs, int rowNum)->{
+            Authors aut = new Authors();
+            aut.setId(rs.getInt("id"));
+            aut.setAuthor(rs.getString("author"));
+            return aut;
+        });
+        if(test.size()==0) {
+            Iterator<String> s = auth.stream().iterator();
+            for (Iterator<String> it = s; it.hasNext(); ) {
+                String s1 = it.next();
+                //parameterSource.addValue("aut",auth.get(i));
+                jdbcTemplate.update("INSERT INTO authors(author) VALUES (?)", s1);
+                Logger.getLogger(BookService.class.getName()).info("Updated author " + s1);
+            }
         }
     }
 }

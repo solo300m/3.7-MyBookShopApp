@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.logging.Logger;
 
 @Controller
-@RequestMapping("/bookshop")
+//@RequestMapping("/bookshop")
 public class MainPageController {
 
     private final BookService bookService;
@@ -25,22 +25,23 @@ public class MainPageController {
     public String reloadMainPage(Model model){
         Logger.getLogger(MainPageController.class.getName()).info("Reload great page!");
         model.addAttribute("bookData", bookService.getBookData());
+        bookService.setAuthorsData(bookService.getBookData());
         return "index";
     }
 
-    @GetMapping("/main")
+    @GetMapping("/bookshop")
     public String mainPage(Model model){
         Logger.getLogger(MainPageController.class.getName()).info("Hy, it is great page!");
         model.addAttribute("bookData", bookService.getBookData());
         bookService.setAuthorsData(bookService.getBookData());
         return "index";
     }
-    @GetMapping("/genres")
+    @GetMapping("/bookshop/genres")
     public String genresPage(){
         Logger.getLogger(MainPageController.class.getName()).info("Opened page genres");
         return "/genres/index.html";
     }
-    @GetMapping("/authors")
+    @GetMapping("/bookshop/authors")
     public String authorPage(Model model){
         Logger.getLogger(MainPageController.class.getName()).info("Opened page authors from main_page");
         model.addAttribute("authorsA", bookService.getAuthorsData('A'));
