@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -44,6 +46,27 @@ public class BookService {
             authors.add(new Authors("нет данных"));
             return new ArrayList<>(authors);
         }
+    }
+    public List<Authors> getAuthorsList() {
+        List<Authors> authors = jdbcTemplate.query("SELECT * FROM authors ", (ResultSet rs, int rowNum) -> {
+            Authors auth = new Authors();
+            auth.setId(rs.getInt("id"));
+            auth.setAuthor(rs.getString("author"));
+            return auth;
+        });
+        return new ArrayList<>(authors);
+    }
+    public TreeMap<String,List<Authors>> getMapAuthors(List<Authors> listA){
+        Map<String,List<Authors>> treeMap = new TreeMap<>();
+        treeMap = listA.stream().collect(Collectors
+                .groupingBy(Authors::getGroupId));
+        for(Map.Entry<String,List<Authors>> at: treeMap.entrySet()){
+            Logger.getLogger(BookService.class.getName()).info(at.getKey());
+            for(Authors authors: at.getValue()){
+                Logger.getLogger(BookService.class.getName()).info(authors.getAuthor());
+            }
+        }
+        return new TreeMap<>(treeMap);
     }
     public void setAuthorsData(List<Book> list){
         HashSet<String> auth = new HashSet<>();

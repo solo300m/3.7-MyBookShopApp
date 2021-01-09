@@ -44,32 +44,7 @@ public class MainPageController {
     @GetMapping("/bookshop/authors")
     public String authorPage(Model model){
         Logger.getLogger(MainPageController.class.getName()).info("Opened page authors from main_page");
-        model.addAttribute("authorsA", bookService.getAuthorsData('A'));
-        model.addAttribute("authorsB", bookService.getAuthorsData('B'));
-        model.addAttribute("authorsC", bookService.getAuthorsData('C'));
-        model.addAttribute("authorsD", bookService.getAuthorsData('D'));
-        model.addAttribute("authorsE", bookService.getAuthorsData('E'));
-        model.addAttribute("authorsF", bookService.getAuthorsData('F'));
-        model.addAttribute("authorsG", bookService.getAuthorsData('G'));
-        model.addAttribute("authorsH", bookService.getAuthorsData('H'));
-        model.addAttribute("authorsI", bookService.getAuthorsData('I'));
-        model.addAttribute("authorsJ", bookService.getAuthorsData('J'));
-        model.addAttribute("authorsK", bookService.getAuthorsData('K'));
-        model.addAttribute("authorsL", bookService.getAuthorsData('L'));
-        model.addAttribute("authorsM", bookService.getAuthorsData('M'));
-        model.addAttribute("authorsN", bookService.getAuthorsData('N'));
-        model.addAttribute("authorsO", bookService.getAuthorsData('O'));
-        model.addAttribute("authorsP", bookService.getAuthorsData('P'));
-        model.addAttribute("authorsQ", bookService.getAuthorsData('Q'));
-        model.addAttribute("authorsR", bookService.getAuthorsData('R'));
-        model.addAttribute("authorsS", bookService.getAuthorsData('S'));
-        model.addAttribute("authorsT", bookService.getAuthorsData('T'));
-        model.addAttribute("authorsU", bookService.getAuthorsData('U'));
-        model.addAttribute("authorsV", bookService.getAuthorsData('V'));
-        model.addAttribute("authorsW", bookService.getAuthorsData('W'));
-        model.addAttribute("authorsX", bookService.getAuthorsData('X'));
-        model.addAttribute("authorsY", bookService.getAuthorsData('Y'));
-        model.addAttribute("authorsZ", bookService.getAuthorsData('Z'));
+        model.addAttribute("authors",bookService);
         return "/authors/index.html";
     }
 }

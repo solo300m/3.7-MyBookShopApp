@@ -3,11 +3,13 @@ package com.example.MyBookShopApp.data;
 public class Authors {
     private Integer id;
     private String author;
+    private String groupId;
 
     public Authors(){}
     public Authors(String author){
         this.id = 0;
         this.author = author;
+        this.groupId = this.author.trim().substring(0,1);
     }
 
     public Integer getId() {
@@ -26,11 +28,16 @@ public class Authors {
         this.author = author;
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public String toString() {
-        return "Authors{" +
-                "id=" + id +
-                ", author='" + author + '\'' +
-                '}';
+        return  author;
     }
 }
