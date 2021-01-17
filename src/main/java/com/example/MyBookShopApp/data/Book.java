@@ -3,10 +3,19 @@ package com.example.MyBookShopApp.data;
 public class Book {
 
     private Integer id;
+    private Integer id_author;
     private String author;
     private String title;
     private String priceOld;
     private String price;
+
+    public Integer getId_author() {
+        return id_author;
+    }
+
+    public void setId_author(Integer id_author) {
+        this.id_author = id_author;
+    }
 
     public Integer getId() {
         return id;

@@ -22,16 +22,29 @@ public class BookService {
     }
 
     public List<Book> getBookData() {
-       List<Book> books = jdbcTemplate.query("SELECT * FROM books",(ResultSet rs, int rowNum)->{
-           Book book = new Book();
-           book.setId(rs.getInt("id"));
-           book.setAuthor(rs.getString("author"));
-           book.setTitle(rs.getString("title"));
-           book.setPriceOld(rs.getString("priceOld"));
-           book.setPrice(rs.getString("price"));
-           return book;
-       });
-       return new ArrayList<>(books);
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books",(ResultSet rs, int rowNum)->{
+            Book book = new Book();
+            book.setId(rs.getInt("id"));
+            book.setAuthor(rs.getString("author"));
+            book.setTitle(rs.getString("title"));
+            book.setPriceOld(rs.getString("priceOld"));
+            book.setPrice(rs.getString("price"));
+            return book;
+        });
+        return new ArrayList<>(books);
+    }
+    public List<Book> getIdAuthorBook(Integer id){
+        List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE id_author="+id+"",(ResultSet rs, int rowNum)->{
+            Book book = new Book();
+            book.setId(rs.getInt("id"));
+            book.setId_author(rs.getInt("id_author"));
+            book.setAuthor(rs.getString("author"));
+            book.setTitle(rs.getString("title"));
+            book.setPriceOld(rs.getString("priceOld"));
+            book.setPrice(rs.getString("price"));
+            return book;
+        });
+        return new ArrayList<>(books);
     }
     public List<Authors> getAuthorsData(char a) {
         List<Authors> authors = jdbcTemplate.query("SELECT * FROM authors WHERE author LIKE '"+a+"%'", (ResultSet rs, int rowNum) -> {
@@ -56,16 +69,39 @@ public class BookService {
         });
         return new ArrayList<>(authors);
     }
+    public Authors getAuthorId(Integer id){
+        List<Authors>list = getAuthorsList();
+        if(list.size() == 0) {
+            setAuthorsData(getBookData());
+            list = getAuthorsList();
+        }
+        List<Authors>temp = list.stream().filter(w->w.getId()==id).collect(Collectors.toList());
+        return (temp.get(0));
+    }
     public TreeMap<String,List<Authors>> getMapAuthors(List<Authors> listA){
         Map<String,List<Authors>> treeMap = new TreeMap<>();
-        treeMap = listA.stream().collect(Collectors
-                .groupingBy(Authors::getGroupId));
-        for(Map.Entry<String,List<Authors>> at: treeMap.entrySet()){
+        treeMap = listA.stream()
+                .sorted(Comparator.comparing(Authors::getAuthor))
+                .collect(Collectors.groupingBy(authors -> authors.getAuthor().substring(0,1)));
+        /*for(Map.Entry<String,List<Authors>> at: treeMap.entrySet()){
             Logger.getLogger(BookService.class.getName()).info(at.getKey());
             for(Authors authors: at.getValue()){
                 Logger.getLogger(BookService.class.getName()).info(authors.getAuthor());
             }
-        }
+        }*/
+        return new TreeMap<>(treeMap);
+    }
+    public TreeMap<Integer,List<Authors>> getMapId(List<Authors> listA){
+        Map<Integer,List<Authors>> treeMap = new TreeMap<>();
+        treeMap = listA.stream()
+                .sorted(Comparator.comparing(Authors::getAuthor))
+                .collect(Collectors.groupingBy(authors -> authors.getId()));
+        /*for(Map.Entry<String,List<Authors>> at: treeMap.entrySet()){
+            Logger.getLogger(BookService.class.getName()).info(at.getKey());
+            for(Authors authors: at.getValue()){
+                Logger.getLogger(BookService.class.getName()).info(authors.getAuthor());
+            }
+        }*/
         return new TreeMap<>(treeMap);
     }
     public void setAuthorsData(List<Book> list){
@@ -83,11 +119,26 @@ public class BookService {
         if(test.size()==0) {
             Iterator<String> s = auth.stream().iterator();
             for (Iterator<String> it = s; it.hasNext(); ) {
+                Authors author = new Authors();
                 String s1 = it.next();
                 //parameterSource.addValue("aut",auth.get(i));
-                jdbcTemplate.update("INSERT INTO authors(author) VALUES (?)", s1);
+                jdbcTemplate.update("INSERT INTO authors(author,biography,photo) VALUES (?,?,?)", s1,author.getBiography(),author.getPhoto());
                 Logger.getLogger(BookService.class.getName()).info("Updated author " + s1);
             }
+        }
+    }
+    public void updateBookIdAuthors(){
+        List<Authors>list = new ArrayList<>();
+        list = jdbcTemplate.query("SELECT * FROM authors",(ResultSet rs, int rowNum)->{
+            Authors authors = new Authors();
+            authors.setId(rs.getInt("id"));
+            authors.setAuthor(rs.getString("author"));
+            authors.setBiography(rs.getString("biography"));
+            authors.setPhoto(rs.getString("photo"));
+            return authors;
+        });
+        for(Authors a: list){
+            jdbcTemplate.update("UPDATE books SET id_author = ? WHERE author = ? AND id_author = 0",a.getId(),a.getAuthor());
         }
     }
 }

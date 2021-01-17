@@ -26,6 +26,7 @@ public class MainPageController {
         Logger.getLogger(MainPageController.class.getName()).info("Reload great page!");
         model.addAttribute("bookData", bookService.getBookData());
         bookService.setAuthorsData(bookService.getBookData());
+        bookService.updateBookIdAuthors();
         return "index";
     }
 
@@ -34,6 +35,7 @@ public class MainPageController {
         Logger.getLogger(MainPageController.class.getName()).info("Hy, it is great page!");
         model.addAttribute("bookData", bookService.getBookData());
         bookService.setAuthorsData(bookService.getBookData());
+        bookService.updateBookIdAuthors();
         return "index";
     }
     @GetMapping("/bookshop/genres")
@@ -44,7 +46,7 @@ public class MainPageController {
     @GetMapping("/bookshop/authors")
     public String authorPage(Model model){
         Logger.getLogger(MainPageController.class.getName()).info("Opened page authors from main_page");
-        model.addAttribute("authors",bookService);
+        model.addAttribute("authors",bookService.getMapAuthors(bookService.getAuthorsList()));
         return "/authors/index.html";
     }
 }

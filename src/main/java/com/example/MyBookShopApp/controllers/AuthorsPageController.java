@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ public class AuthorsPageController {
     @GetMapping
     public String reloadAuthors(Model model){
         model.addAttribute("bookList",bookService.getBookData());
-        model.addAttribute("authors",bookService);
+        model.addAttribute("authors",bookService.getMapAuthors(bookService.getAuthorsList()));
         return "/authors/index";
     }
 
@@ -39,9 +41,19 @@ public class AuthorsPageController {
         model.addAttribute("bookData", bookService.getBookData());
         return "index.html";
     }
-    @GetMapping("/authors")
+    /*@GetMapping("/authors")
     public String authorPage(){
         Logger.getLogger(MainPageController.class.getName()).info("Opened page authors");
         return "/authors/index.html";
+    }*/
+    @GetMapping("/{id}")
+    public String slugPage(@PathVariable("id") int id, Model model){
+        //Logger.getLogger(MainPageController.class.getName()).info("Opened page slug");
+        model.addAttribute("authors",bookService.getAuthorId(id).getAuthor());
+        model.addAttribute("bio",bookService.getAuthorId(id).getBiography());
+        model.addAttribute("photo",bookService.getAuthorId(id).getPhoto());
+        model.addAttribute("books",bookService.getIdAuthorBook(id));
+        Logger.getLogger(MainPageController.class.getName()).info("Opened page slug"/*+model.getAttribute("bio")*/);
+        return "/authors/slugs/slug.html";
     }
 }

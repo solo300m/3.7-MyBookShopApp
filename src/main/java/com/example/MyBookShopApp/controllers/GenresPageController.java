@@ -33,7 +33,7 @@ public class GenresPageController {
     @GetMapping("/authors")
     public String authorPage(Model model){
         Logger.getLogger(MainPageController.class.getName()).info("Opened page authors from Genres_Page");
-        model.addAttribute("authors",bookService);
+        model.addAttribute("authors",bookService.getMapAuthors(bookService.getAuthorsList()));
         return "/authors/index.html";
     }
 }
