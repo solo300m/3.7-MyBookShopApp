@@ -22,16 +22,16 @@ public class BookService {
     }
 
     public List<Book> getBookData() {
-        List<Book> books = jdbcTemplate.query("SELECT * FROM books",(ResultSet rs, int rowNum)->{
-            Book book = new Book();
-            book.setId(rs.getInt("id"));
-            book.setAuthor(rs.getString("author"));
-            book.setTitle(rs.getString("title"));
-            book.setPriceOld(rs.getString("priceOld"));
-            book.setPrice(rs.getString("price"));
-            return book;
-        });
-        return new ArrayList<>(books);
+       List<Book> books = jdbcTemplate.query("SELECT * FROM books",(ResultSet rs, int rowNum)->{
+           Book book = new Book();
+           book.setId(rs.getInt("id"));
+           book.setAuthor(rs.getString("author"));
+           book.setTitle(rs.getString("title"));
+           book.setPriceOld(rs.getString("priceOld"));
+           book.setPrice(rs.getString("price"));
+           return book;
+       });
+       return new ArrayList<>(books);
     }
     public List<Book> getIdAuthorBook(Integer id){
         List<Book> books = jdbcTemplate.query("SELECT * FROM books WHERE id_author="+id+"",(ResultSet rs, int rowNum)->{
@@ -78,8 +78,28 @@ public class BookService {
         List<Authors>temp = list.stream().filter(w->w.getId()==id).collect(Collectors.toList());
         return (temp.get(0));
     }
-    public TreeMap<String,List<Authors>> getMapAuthors(List<Authors> listA){
-        Map<String,List<Authors>> treeMap = new TreeMap<>();
+    public Map<String,List<Book>> getAuthorName(String name){
+        List<Authors>list = getAuthorsList();
+        if(list.size() == 0) {
+            setAuthorsData(getBookData());
+            list = getAuthorsList();
+        }
+        List<Book>tempBooks = getBookData();
+        List<Book>tBooks = new ArrayList<>();
+        List<Authors>temp = list.stream().filter(w->w.getAuthor().contains(name)).collect(Collectors.toList());
+        for(Authors a: temp){
+            for (Book b: tempBooks){
+                if(b.getAuthor().equals(a.getAuthor())){
+                    tBooks.add(b);
+                }
+            }
+        }
+        Map<String,List<Book>>books = tBooks.stream()
+                .collect(Collectors.groupingBy(w->w.getAuthor()));
+        return books;
+    }
+    public Map<String,List<Authors>> getMapAuthors(List<Authors> listA){
+        Map<String,List<Authors>> treeMap;
         treeMap = listA.stream()
                 .sorted(Comparator.comparing(Authors::getAuthor))
                 .collect(Collectors.groupingBy(authors -> authors.getAuthor().substring(0,1)));
@@ -89,7 +109,7 @@ public class BookService {
                 Logger.getLogger(BookService.class.getName()).info(authors.getAuthor());
             }
         }*/
-        return new TreeMap<>(treeMap);
+        return treeMap;
     }
     public TreeMap<Integer,List<Authors>> getMapId(List<Authors> listA){
         Map<Integer,List<Authors>> treeMap = new TreeMap<>();

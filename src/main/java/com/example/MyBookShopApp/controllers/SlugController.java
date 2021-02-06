@@ -20,7 +20,7 @@ public class SlugController {
         this.bookService = bookService;
     }
 
-    //    @GetMapping
+//    @GetMapping
 //    public String getSlugPage(Model model){
 //        model.addAttribute("authors",bookService.getMapId(bookService.getAuthorsList()));
 //        return "authors/slug.html";

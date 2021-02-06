@@ -1,13 +1,14 @@
 package com.example.MyBookShopApp.controllers;
 
+import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
@@ -21,21 +22,22 @@ public class MainPageController {
         this.bookService = bookService;
     }
 
-    @GetMapping
-    public String reloadMainPage(Model model){
-        Logger.getLogger(MainPageController.class.getName()).info("Reload great page!");
-        model.addAttribute("bookData", bookService.getBookData());
+    @ModelAttribute("recommendedBooks")
+    public List<Book> recommendedBooks(){
         bookService.setAuthorsData(bookService.getBookData());
         bookService.updateBookIdAuthors();
+        return bookService.getBookData();
+    }
+
+    @GetMapping("/")
+    public String reloadMainPage(){
+        Logger.getLogger(MainPageController.class.getName()).info("Reload great page!");
         return "index";
     }
 
     @GetMapping("/bookshop")
-    public String mainPage(Model model){
+    public String mainPage(){
         Logger.getLogger(MainPageController.class.getName()).info("Hy, it is great page!");
-        model.addAttribute("bookData", bookService.getBookData());
-        bookService.setAuthorsData(bookService.getBookData());
-        bookService.updateBookIdAuthors();
         return "index";
     }
     @GetMapping("/bookshop/genres")
@@ -49,4 +51,10 @@ public class MainPageController {
         model.addAttribute("authors",bookService.getMapAuthors(bookService.getAuthorsList()));
         return "/authors/index.html";
     }
+    @GetMapping("/bookshop/recent")
+    public String recentPage(){
+        Logger.getLogger(MainPageController.class.getName()).info("Opened page recent from main_page");
+        return "/recent.html";
+    }
+
 }
