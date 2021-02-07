@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <body>
 <header class="Header" th:fragment="headFragment">
-    <script srt="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script type="text/javascript">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script th:inline="javascript">
         $(document).ready(function () {
             $("#locales").change(function (){
                 var selectedOption = $("#locales").val();
@@ -26,7 +27,7 @@
                             <form class="form form_search" th:action="@{/search}"  th:method="get" data-searchlimit="20"><!--th:action="@{/search}" th:object="${foundAuthor}"-->
                                 <!--id="query"--><input class="search-input"  th:name="found" type="text"
                                                         th:placeholder="#{searchbar.placeholder}" placeholder="Search over 30 million book titles" /><!--th:field="*{fName}"-->
-                                <button class="search-button" type="submit" name="search" id="search" th:href="@{/search/{found}(found = found)}">РџРѕРёСЃРє
+                                <button class="search-button" type="submit" name="search" id="search" th:href="@{/search/{found}(found = found)}">Поиск
                                 </button>
                             </form>
                         </div>
@@ -40,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row-block Header-trigger"><a class="menuTrigger" href="#navigate">
-                    <div class="menuTrigger-content">РџРѕРєР°Р·Р°С‚СЊ РЅР°РІРёРіР°С†РёСЋ
+                    <div class="menuTrigger-content">Показать навигацию
                     </div><span></span><span></span><span></span></a>
                 </div>
             </div>
@@ -50,25 +51,25 @@
         <div class="wrap">
             <nav class="menuModal" id="navigate">
                 <ul class="menu menu_main">
-                    <li class="menu-item"><!--menu-item_ACTIVE--><a class="menu-link" href="/bookshop" th:href="@{/bookshop}" th:text="#{topbar.main}">Р“Р»Р°РІРЅР°СЏ</a>
+                    <li class="menu-item"><!--menu-item_ACTIVE--><a class="menu-link" href="/bookshop" th:href="@{/bookshop}" th:utext="#{topbar.main}" >Главная</a>
                     </li>
                     <!--<form method="get" th:action="@{/bookshop/genres}">-->
-                    <li class="menu-item"><!--<a class="menu-link"> href="/genres/index.html">Р–Р°РЅСЂС‹</a>-->
-                        <a class="menu-link" href="/bookshop/genres" th:href="@{/genres}" th:text="#{topbar.genres}">Р–Р°РЅСЂС‹</a>
+                    <li class="menu-item"><!--<a class="menu-link"> href="/genres/index.html">Жанры</a>-->
+                        <a class="menu-link" href="/bookshop/genres" th:href="@{/genres}" th:utext="#{topbar.genres}">Жанры</a>
                     </li>
                     <!--</form>-->
-                    <li class="menu-item"><a class="menu-link" href="/recent.html" th:href="@{/recent}" th:text="#{topbar.recent}">РќРѕРІРёРЅРєРё</a>
+                    <li class="menu-item"><a class="menu-link" href="/recent.html" th:href="@{/recent}" th:utext="#{topbar.recent}">Новинки</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/books/popular.html" th:href="@{/popular}" th:text="#{topbar.popular}">РџРѕРїСѓР»СЏСЂРЅРѕРµ</a>
+                    <li class="menu-item"><a class="menu-link" href="/books/popular.html" th:href="@{/popular}" th:utext="#{topbar.popular}">Популярное</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/bookshop/authors" th:href="@{/authors}" th:text="#{topbar.authors}">РђРІС‚РѕСЂС‹</a>
+                    <li class="menu-item"><a class="menu-link" href="/bookshop/authors" th:href="@{/authors}" th:utext="#{topbar.authors}">Авторы</a>
                     </li>
                     <li class="menu-item">
-                        <span>Р’С‹Р±РѕСЂ СЏР·С‹РєР°</span>
+                        <span>Выбор языка</span>
                         <select id="locales">
                             <option value=""></option>
                             <option value="en" >English</option>
-                            <option value="ru">Р СѓСЃСЃРєРёР№</option>
+                            <option value="ru">Русский</option>
                         </select>
                     </li>
                 </ul>
@@ -77,7 +78,7 @@
     </div>
 </header>
 
-
+<!--<script srt="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 </body>
 </html>
 

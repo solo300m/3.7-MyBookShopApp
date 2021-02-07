@@ -3,6 +3,17 @@
 
 <body>
 <footer class="Footer" th:fragment="footFragment">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $("#locales").change(function (){
+                var selectedOption = $("#locales").val();
+                if(selectedOption != ''){
+                    window.location.replace('?lang='+selectedOption);
+                }
+            });
+        });
+    </script>
     <div class="wrap">
         <div class="row Footer-main">
             <div class="row-block"><a class="logo logo_footer Footer-logo" href="/"><img class="logo-image" src="/assets/img/logo_footer.png" alt="logo_footer.png"/><span class="logo-text">BOOKSHOP</span></a>
