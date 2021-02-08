@@ -27,7 +27,7 @@
                             <form class="form form_search" th:action="@{/search}"  th:method="get" data-searchlimit="20"><!--th:action="@{/search}" th:object="${foundAuthor}"-->
                                 <!--id="query"--><input class="search-input"  th:name="found" type="text"
                                                         th:placeholder="#{searchbar.placeholder}" placeholder="Search over 30 million book titles" /><!--th:field="*{fName}"-->
-                                <button class="search-button" type="submit" name="search" id="search" th:href="@{/search/{found}(found = found)}">Поиск
+                                <button class="search-button" type="submit" name="search" id="search" th:href="@{/search/{found}(found = found)}" th:utext="#{topbar.found}">Поиск
                                 </button>
                             </form>
                         </div>
@@ -65,11 +65,11 @@
                     <li class="menu-item"><a class="menu-link" href="/bookshop/authors" th:href="@{/authors}" th:utext="#{topbar.authors}">Авторы</a>
                     </li>
                     <li class="menu-item">
-                        <span>Выбор языка</span>
+                        <span class="menu_item" th:utext="#{topbar.checer}">Выбор языка</span>
                         <select id="locales">
                             <option value=""></option>
-                            <option value="en" >English</option>
-                            <option value="ru">Русский</option>
+                            <option value="en" th:utext="#{topbar.en}">English</option>
+                            <option value="ru" th:utext="#{topbar.ru}">Русский</option>
                         </select>
                     </li>
                 </ul>
